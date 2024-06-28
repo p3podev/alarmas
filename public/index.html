@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Alarma</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      background-color: #f4f4f4;
+    }
+
+    header, section {
+      width: 90%;
+      max-width: 600px;
+      margin: 20px 0;
+      background: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    h1, h2 {
+      text-align: center;
+      color: #333;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+    }
+
+    label {
+      margin-top: 10px;
+      font-weight: bold;
+    }
+
+    input, select, textarea, button {
+      margin-top: 5px;
+      padding: 10px;
+      font-size: 1em;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+
+    button {
+      margin-top: 20px;
+      background-color: #007BFF;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+
+    #statusMessage {
+      text-align: center;
+      color: #007BFF;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>DIRECCION DE GESTION DE RIESGOS</h1>
+  </header>
+  <section>
+    <h2>Alarma</h2>
+    <form id="alertForm" enctype="multipart/form-data">
+      <label for="usuario">Usuario</label>
+      <input type="text" id="usuario" name="usuario" required />
+
+      <label for="tipoAlerta">Tipo de Alerta</label>
+      <select id="tipoAlerta" name="tipoAlerta" required>
+        <option value="">Selecciona una opción</option>
+        <option value="Aviso1">Aviso1</option>
+        <option value="Aviso2">Aviso2</option>
+      </select>
+
+      <label for="mensaje">Mensaje</label>
+      <textarea id="mensaje" name="mensaje" rows="4" required></textarea>
+
+      <label for="foto">Subir Foto</label>
+      <input type="file" id="foto" name="foto" accept="image/*" required />
+
+      <input type="hidden" id="latitud" name="latitud" />
+      <input type="hidden" id="longitud" name="longitud" />
+
+      <button type="submit">Enviar Alerta</button>
+    </form>
+  </section>
+  <section>
+    <div id="statusMessage"></div>
+  </section>
+  <script src="https://cdn.socket.io/4.0.1/socket.io.min.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
