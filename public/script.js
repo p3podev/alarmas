@@ -2,6 +2,7 @@ document.addEventListener("DOMContentLoaded", function () {
   const latitudInput = document.getElementById("latitud");
   const longitudInput = document.getElementById("longitud");
   let activeNotificationId = null;
+  let apiUrl = ""; // Declarar apiUrl en un ámbito más amplio
 
   // Obtener la ubicación al cargar la página
   if (navigator.geolocation) {
@@ -28,7 +29,7 @@ document.addEventListener("DOMContentLoaded", function () {
   fetch("/config")
     .then((response) => response.json())
     .then((data) => {
-      const apiUrl = data.apiUrl; // Obtener la URL de la API
+      apiUrl = data.apiUrl; // Asignar la URL de la API a la variable apiUrl
       console.log("API URL:", apiUrl);
 
       // Manejar el envío del formulario
