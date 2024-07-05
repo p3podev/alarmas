@@ -13,7 +13,7 @@ if (!process.env.ALLOWED_ORIGINS) {
 }
 
 const allowedOrigins = process.env.ALLOWED_ORIGINS.split(',').map(origin => origin.trim());
-const apiUrls = process.env.API_URL.trim();;
+const apiUrl = process.env.API_URL;
 
 // Middleware de seguridad con Helmet
 app.use(
