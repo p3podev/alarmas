@@ -51,7 +51,7 @@ app.get("/", (req, res) => {
 
 app.get("/config", (req, res) => {
   res.json({
-    apiUrls: apiUrl,
+    apiUrl: apiUrl,
   });
 });
 
