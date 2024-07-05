@@ -13,7 +13,7 @@ if (!process.env.ALLOWED_ORIGINS) {
 }
 
 const allowedOrigins = process.env.ALLOWED_ORIGINS.split(',').map(origin => origin.trim());
-const apiUrls = process.env.API_URL;
+const apiUrls = process.env.API_URL.trim();;
 
 // Middleware de seguridad con Helmet
 app.use(
@@ -23,7 +23,7 @@ app.use(
       directives: {
         "default-src": ["'self'"],
         "script-src": ["'self'", "https://cdn.socket.io"],
-        "connect-src": ["'self'", ...apiUrls.map(url => url), ...apiUrls.map(url => url.replace('https', 'wss'))],
+        "connect-src": ["'self'", apiUrl, apiUrl.replace('https', 'wss')],
         "img-src": ["'self'", "data:", "https:"],
       },
     },
