@@ -5,7 +5,7 @@ const path = require("path");
 
 const app = express();
 const port = process.env.PORT || 3001;
-const allowedOrigin = process.env.ALLOWED_ORIGIN;
+const allowedOrigins = process.env.ALLOWED_ORIGINS.split(',').map(origin => origin.trim());
 const apiUrl = process.env.API_URL;
 
 // Middleware de seguridad con Helmet
@@ -25,7 +25,10 @@ app.use(
 
 // Middleware para habilitar CORS (Cross-Origin Resource Sharing)
 app.use((req, res, next) => {
-  res.setHeader("Access-Control-Allow-Origin", allowedOrigin);
+  const origin = req.headers.origin;
+  if (allowedOrigins.includes(origin)) {
+    res.setHeader("Access-Control-Allow-Origin", origin);
+  }
   res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
   res.setHeader("Access-Control-Allow-Headers", "Content-Type");
   next();
