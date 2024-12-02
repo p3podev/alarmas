@@ -1,105 +1,83 @@
 <!DOCTYPE html>
 <html lang="es">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Alarma</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-      padding: 0;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      background-color: #f4f4f4;
-    }
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sistema de Alarma</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <!-- NavBar -->
+    <nav>
+      <div><span>Usuario: Aleatorio</span></div>
+      <div><button>Historial</button></div>
+    </nav>
 
-    header, section {
-      width: 90%;
-      max-width: 600px;
-      margin: 20px 0;
-      background: #fff;
-      padding: 20px;
-      border-radius: 8px;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    }
+    <!-- Título principal -->
+    <header>
+      <h1>DIRECCIÓN DE GESTIÓN DE RIESGOS</h1>
+    </header>
 
-    h1, h2 {
-      text-align: center;
-      color: #333;
-    }
+    <!-- Sección del Botón de Pánico -->
+    <section id="panic-button-section">
+      <h2>Botón de Pánico</h2>
+      <div class="panic-button-container">
+        <button class="panic-button pulse" id="panicButton">
+          <svg
+            width="100"
+            height="100"
+            viewBox="0 0 100 100"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M50 10C27.9086 10 10 27.9086 10 50C10 72.0914 27.9086 90 50 90C72.0914 90 90 72.0914 90 50C90 27.9086 72.0914 10 50 10ZM50 82C32.3269 82 18 67.6731 18 50C18 32.3269 32.3269 18 50 18C67.6731 18 82 32.3269 82 50C82 67.6731 67.6731 82 50 82Z"
+              fill="white"
+            />
+            <path
+              d="M50 30C46.6863 30 44 32.6863 44 36V54C44 57.3137 46.6863 60 50 60C53.3137 60 56 57.3137 56 54V36C56 32.6863 53.3137 30 50 30Z"
+              fill="white"
+            />
+            <circle cx="50" cy="70" r="6" fill="white" />
+          </svg>
+        </button>
+        <p class="panic-text">Activar Alarma</p>
+      </div>
+    </section>
 
-    form {
-      display: flex;
-      flex-direction: column;
-    }
+    <!-- Sección de Alarma (Oculta por defecto) -->
+    <section id="alarmSection">
+      <h2>Alarma</h2>
+      <form id="alertForm" enctype="multipart/form-data">
+        <label for="tipoAlerta">Tipo de Alerta</label>
+        <select id="tipoAlerta" name="tipoAlerta">
+          <option value=""></option>
+        </select>
 
-    label {
-      margin-top: 10px;
-      font-weight: bold;
-    }
+        <label for="mensaje">Mensaje</label>
+        <textarea id="mensaje" name="mensaje" rows="4"></textarea>
 
-    input, select, textarea, button {
-      margin-top: 5px;
-      padding: 10px;
-      font-size: 1em;
-      border-radius: 5px;
-      border: 1px solid #ccc;
-    }
+        <label for="foto">Subir Foto (Opcional)</label>
+        <input type="file" id="foto" name="foto" accept="image/*" />
 
-    button {
-      margin-top: 20px;
-      background-color: #007BFF;
-      color: white;
-      border: none;
-      cursor: pointer;
-    }
+        <input type="hidden" id="latitud" name="latitud" />
+        <input type="hidden" id="longitud" name="longitud" />
 
-    button:hover {
-      background-color: #0056b3;
-    }
+        <button class="button_general" id="send_alert_button" type="submit">Enviar Alerta</button>
+      </form>
+    </section>
+    <section id="detailed-alarm">
+      <button class="button_general" id="detailed-alarm-button">Alarma Detallada</button>
+    </section>
+    <section id="pb_back_section">
+      <button class="panic-button_back" id="panic-button_back">Boton de Pánico</button>
+    </section>
+    <!-- Sección de Estado -->
+    <section id="statusMessage_section">
+      <div id="statusMessage"></div>
+    </section>
 
-    #statusMessage {
-      text-align: center;
-      color: #007BFF;
-      font-weight: bold;
-    }
-  </style>
-</head>
-<body>
-  <header>
-    <h1>DIRECCION DE GESTION DE RIESGOS</h1>
-  </header>
-  <section>
-    <h2>Alarma</h2>
-    <form id="alertForm" enctype="multipart/form-data">
-      <label for="usuario">Usuario</label>
-      <input type="text" id="usuario" name="usuario" required />
-
-      <label for="tipoAlerta">Tipo de Alerta</label>
-      <select id="tipoAlerta" name="tipoAlerta" required>
-        <option value="">Selecciona una opción</option>
-        <option value="Aviso1">Aviso1</option>
-        <option value="Aviso2">Aviso2</option>
-      </select>
-
-      <label for="mensaje">Mensaje</label>
-      <textarea id="mensaje" name="mensaje" rows="4" required></textarea>
-
-      <label for="foto">Subir Foto</label>
-      <input type="file" id="foto" name="foto" accept="image/*" required />
-
-      <input type="hidden" id="latitud" name="latitud" />
-      <input type="hidden" id="longitud" name="longitud" />
-
-      <button type="submit">Enviar Alerta</button>
-    </form>
-  </section>
-  <section>
-    <div id="statusMessage"></div>
-  </section>
-  <script src="https://cdn.socket.io/4.0.1/socket.io.min.js"></script>
-  <script src="script.js"></script>
-</body>
+    <!-- Enlace al archivo JavaScript -->
+    <script src="script.js"></script>
+  </body>
 </html>

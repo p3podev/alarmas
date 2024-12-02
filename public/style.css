@@ -1,0 +1,188 @@
+:root {
+  --primary: #ff3e3e;
+  --dark: #1a1a1a;
+  --light: #ffffff;
+  --gray: #f0f0f0;
+  --primary-dark: #0056b3;
+  --primary-hover: #004080;
+  --nav-bg: #007bff;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+}
+
+body {
+  background-color: var(--light);
+  min-height: 75vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+nav {
+  width: 100%;
+  background-color: var(--nav-bg);
+  color: var(--light);
+  padding: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+nav div{
+    margin: 0 30px;
+}
+
+nav button {
+  background-color: var(--primary-dark);
+  border: none;
+  padding: 10px 15px;
+  color: var(--light);
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+nav button:hover {
+  background-color: var(--primary-hover);
+}
+
+header,
+section {
+  width: 90%;
+  max-width: 600px;
+  margin: 10px 0;
+  background: var(--light);
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+h1,
+h2 {
+    font-size: 1.2em;
+  text-align: center;
+  color: #333;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+}
+
+label {
+  margin-top: 10px;
+  font-weight: bold;
+}
+
+input,
+select,
+textarea,
+button {
+  margin-top: 0px;
+  padding: 10px;
+  font-size: 1em;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+button {
+  background-color: var(--nav-bg);
+  color: var(--light);
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.button_general:hover {
+  background-color: var(--primary-dark);
+}
+#alarmSection {
+  display: none;
+}
+#alarmSection button{
+    margin-top: 10px;
+  }
+#panic-button-section {
+  display: block;
+}
+#detailed-alarm{
+    display: block;  
+}
+#statusMessage_section{
+    display: none;
+}
+#pb_back_section{
+    display: none;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.panic-button-container {
+  margin-top: 10px;
+  text-align: center;
+}
+
+.panic-button {
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  background: var(--primary);
+  border: none;
+  box-shadow: 0 0 20px rgba(255, 62, 62, 0.5);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.panic-button:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 30px rgba(255, 62, 62, 0.7);
+}
+.panic-button_back {
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    background: var(--primary);
+    box-shadow: 0 0 20px rgba(255, 62, 62, 0.5);
+    cursor: pointer;
+    max-width: 600px;
+    width: 100%;
+  }
+  .panic-button_back:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 30px rgba(255, 62, 62, 0.7);
+  }
+
+.panic-text {
+  color: var(--primary);
+  font-size: 20px;
+  font-weight: bold;
+  margin-top: 1rem;
+}
+
+#statusMessage {
+  margin: 1px;
+  padding: 1rem;
+  background: var(--gray);
+  border-radius: 8px;
+  min-width: 300px;
+  text-align: center;
+}
+#detailed-alarm{
+    margin: 1px;
+    padding:9px;
+    background: var(--light);
+    border-radius: 8px;
+    min-width: 300px;
+    text-align: center;
+    align-items: center; 
+    justify-content: center;
+}
+#detailed-alarm button{
+width: 100%;
+}
