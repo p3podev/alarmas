@@ -1,13 +1,12 @@
 document.addEventListener("DOMContentLoaded", function () {
   const latitudInput = document.getElementById("latitud");
   const longitudInput = document.getElementById("longitud");
-  const navUserDiv = document.querySelector("div > span"); // Seleccionar el span donde aparecerá el usuario
+  const navUserDiv = document.querySelector("div > span");
   const tipoAlertaSelect = document.getElementById("tipoAlerta");
-  const panicButton = document.getElementById('panicButton');
+  const panicButton = document.getElementById("panicButton");
   let apiUrl = "";
   let usuarioId = null;
 
-  // Funciones para manipular el DOM
   function showElement(elementId) {
     document.getElementById(elementId).style.display = "block";
   }
@@ -18,7 +17,16 @@ document.addEventListener("DOMContentLoaded", function () {
 
   function disableButton(buttonId) {
     const button = document.getElementById(buttonId);
-    button.disabled = true;
+    if (button) {
+      button.disabled = true;
+    }
+  }
+
+  function updateStatusMessage(message) {
+    const statusMessageElement = document.getElementById("statusMessage");
+    if (statusMessageElement) {
+      statusMessageElement.textContent = message;
+    }
   }
 
   function enableButton(buttonId) {
@@ -26,133 +34,132 @@ document.addEventListener("DOMContentLoaded", function () {
     button.disabled = false;
   }
 
-  // Obtener la ubicación al cargar la página
   if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(
       function (position) {
-        const latitude = position.coords.latitude;
-        const longitude = position.coords.longitude;
-        latitudInput.value = latitude;
-        longitudInput.value = longitude;
-        console.log("Ubicación obtenida:", latitude, longitude);
+        latitudInput.value = position.coords.latitude;
+        longitudInput.value = position.coords.longitude;
       },
-      function (error) {
-        console.error("Error al obtener la ubicación:", error);
-      },
+      function () {},
       {
         enableHighAccuracy: true,
       }
     );
-  } else {
-    console.log("Tu navegador no soporta geolocalización.");
   }
 
-  // Obtener la URL de la API desde /config
   async function obtenerConfig() {
     try {
       const response = await fetch("/config");
       const data = await response.json();
       apiUrl = data.apiUrl;
-      console.log("API URL:", apiUrl);
-
-      // Después de obtener la URL de la API, cargamos los tipos de alerta
       await cargarTiposDeAlerta();
-
-      // Llamar a la función para obtener un usuario aleatorio
       await getRandomUser();
     } catch (error) {
-      console.error("Error al obtener la configuración:", error);
       alert("Error al obtener la configuración del servidor.");
     }
   }
 
-  // Función para obtener un usuario aleatorio
   async function getRandomUser() {
     try {
       const response = await fetch(`${apiUrl}/random-user`);
-      if (!response.ok) {
-        throw new Error("Error al obtener el usuario aleatorio");
-      }
+      if (!response.ok) throw new Error("Error al obtener el usuario aleatorio");
       const data = await response.json();
-      console.log("Respuesta de la API (usuario aleatorio):", data); // Agregado para depuración
-      if (data.username && data.mail && data.id) {  // Asegurarse de que 'id' esté presente
-        navUserDiv.textContent = `Usuario: ${data.username} ${data.mail}`; // Mostrar username y mail
-        usuarioId = data.id; // Guardar el ID del usuario aleatorio
+      if (data.username && data.mail && data.id) {
+        navUserDiv.textContent = `Usuario: ${data.username} ${data.mail}`;
+        usuarioId = data.id;
       } else {
         navUserDiv.textContent = "Usuario: No disponible";
         usuarioId = null;
       }
-    } catch (error) {
-      console.error(error);
+    } catch {
       navUserDiv.textContent = "Usuario: No disponible";
       usuarioId = null;
     }
   }
 
-  // Función para cargar los tipos de alerta
   async function cargarTiposDeAlerta() {
     try {
       const response = await fetch(`${apiUrl}/tipo-alerta`);
-      if (!response.ok) {
-        throw new Error("Error al cargar los tipos de alerta");
-      }
+      if (!response.ok) throw new Error();
       const data = await response.json();
-      data.forEach(tipo => {
-        if (tipo.id !== 8) { // Excluimos el tipo con id = 8
+      data.forEach((tipo, index) => {
+        if (tipo.id !== 8) {
           const option = document.createElement("option");
-          option.value = tipo.id; // El valor es el ID
-          option.textContent = tipo.descripcion; // El texto es la descripción
-          tipoAlertaSelect.appendChild(option);
+          option.value = index + 1;
+          option.textContent = tipo.descripcion;
+          document.getElementById("tipoAlerta").appendChild(option);
         }
       });
-    } catch (error) {
-      console.error("Error al cargar los tipos de alerta:", error);
-    }
+    } catch {}
   }
 
-  // Evento para el botón "panicButton"
-  panicButton.addEventListener('click', async () => {
+  panicButton.addEventListener("click", async () => {
     try {
-      if (!usuarioId) {
-        console.error("Error: Usuario no disponible.");
-        return;
-      }
-
+      if (!usuarioId) return;
       const latitude = latitudInput.value;
       const longitude = longitudInput.value;
 
-      // Enviar datos al backend para crear la alerta
-      const response = await fetch(`${apiUrl}/create-alert`, {
-        method: 'POST',
+      const response = await fetch(`${apiUrl}/trigger-panic-button`, {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({
           id_usuario: usuarioId,
-          id_tipo: 8, // Tipo de alerta predefinido
-          mensaje: null, // No mensaje
           latitud: latitude,
           longitud: longitude,
-          foto_url: null, // No foto
-          id_georeferencia: null, // No georeferencia
-          id_sirena: null, // No sirena
-          estado: 'activo', // Estado activo
-          feedback: null, // No feedback
         }),
       });
-      
+
       const data = await response.json();
-      console.log('Alerta creada:', data);
-      // Cambiar vista después de enviar la alerta
-      hideElement("detailed-alarm");
-      showElement("statusMessage_section");
-      disableButton("panicButton");
-    } catch (error) {
-      console.error('Error al crear alerta:', error);
-    }
+      if (response.ok) {
+        hideElement("detailed-alarm");
+        showElement("statusMessage_section");
+        updateStatusMessage(
+          "La ayuda va en camino, estamos monitorizando su alerta"
+        );
+        disableButton("panicButton");
+      }
+    } catch {}
   });
 
-  // Evento para el botón "detailed-alarm-button"
+  document
+    .getElementById("alertForm")
+    .addEventListener("submit", async function (event) {
+      event.preventDefault();
+      if (!usuarioId) return;
+
+      const latitude = latitudInput.value;
+      const longitude = longitudInput.value;
+      const selectElement = document.getElementById("tipoAlerta");
+      const selectedOption = selectElement.options[selectElement.selectedIndex];
+      const idTipo = selectedOption.value;
+      const mensaje = document.getElementById("mensaje").value;
+      const foto = document.getElementById("foto").files[0];
+      const formData = new FormData();
+
+      formData.append("id_usuario", usuarioId);
+      formData.append("id_tipo", idTipo);
+      formData.append("mensaje", mensaje);
+      formData.append("latitud", latitude);
+      formData.append("longitud", longitude);
+      formData.append("foto", foto || null);
+
+      try {
+        const response = await fetch(`${apiUrl}/send-alert`, {
+          method: "POST",
+          body: formData,
+        });
+
+        const data = await response.json();
+        if (response.ok) {
+          showElement("statusMessage_section");
+          hideElement("pb_back_section");
+          disableButton("send_alert_button");
+        }
+      } catch {}
+    });
+
   document
     .getElementById("detailed-alarm-button")
     .addEventListener("click", function () {
@@ -162,7 +169,6 @@ document.addEventListener("DOMContentLoaded", function () {
       showElement("pb_back_section");
     });
 
-  // Evento para el botón "panic-button_back"
   document
     .getElementById("panic-button_back")
     .addEventListener("click", function () {
@@ -172,16 +178,5 @@ document.addEventListener("DOMContentLoaded", function () {
       hideElement("pb_back_section");
     });
 
-  // Evento para el botón "send_alert_button"
-  document
-    .getElementById("send_alert_button")
-    .addEventListener("click", function () {
-      showElement("statusMessage_section");
-      hideElement("pb_back_section");
-      disableButton("send_alert_button");
-    });
-
-  // Llamar a obtener configuración e inicializar
   obtenerConfig();
 });
-

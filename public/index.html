@@ -12,7 +12,8 @@
       <div><span>Usuario: Aleatorio</span></div>
       <div><button>Historial</button></div>
     </nav>
-
+    <input type="hidden" id="latitud" name="latitud" />
+    <input type="hidden" id="longitud" name="longitud" />
     <!-- Título principal -->
     <header>
       <h1>DIRECCIÓN DE GESTIÓN DE RIESGOS</h1>
@@ -48,29 +49,30 @@
     <!-- Sección de Alarma (Oculta por defecto) -->
     <section id="alarmSection">
       <h2>Alarma</h2>
-      <form id="alertForm" enctype="multipart/form-data">
+      <form id="alertForm">
         <label for="tipoAlerta">Tipo de Alerta</label>
         <select id="tipoAlerta" name="tipoAlerta">
-          <option value=""></option>
+          <option value="">Selecciona una alerta</option>
         </select>
-
         <label for="mensaje">Mensaje</label>
         <textarea id="mensaje" name="mensaje" rows="4"></textarea>
-
         <label for="foto">Subir Foto (Opcional)</label>
         <input type="file" id="foto" name="foto" accept="image/*" />
-
-        <input type="hidden" id="latitud" name="latitud" />
-        <input type="hidden" id="longitud" name="longitud" />
-
-        <button class="button_general" id="send_alert_button" type="submit">Enviar Alerta</button>
+        <button class="button_general" id="send_alert_button" type="submit">
+          Enviar Alerta
+        </button>
       </form>
     </section>
+
     <section id="detailed-alarm">
-      <button class="button_general" id="detailed-alarm-button">Alarma Detallada</button>
+      <button class="button_general" id="detailed-alarm-button">
+        Alarma Detallada
+      </button>
     </section>
     <section id="pb_back_section">
-      <button class="panic-button_back" id="panic-button_back">Boton de Pánico</button>
+      <button class="panic-button_back" id="panic-button_back">
+        Boton de Pánico
+      </button>
     </section>
     <!-- Sección de Estado -->
     <section id="statusMessage_section">
